@@ -1,39 +1,44 @@
 <template>
   <div>
     <SearchBar @termChange="onTermChanged"></SearchBar>
+    <VideoList :list="list" />
   </div>
 </template>
 
 <script>
-import SearchBar from "./components/SearchBar/SearchBar";
 import axios from "axios";
-const API_KEY = "AIzaSyDwSsXQ4V8GBH0PGfuAw9muk-_Y8d5hsjY";
-const setKeyWord = async word => {
-  try {
-    
-    const res = await axios.get(`https://www.googleapis.com/youtube/v3/search/`, {
-      params: {
-        key: API_KEY,
-        type: "video",
-        part: "snippet",
-        q: word
-      }
-    });
-    console.log(res)
-  } catch (err) {
-    console.error(err.message);
-  }
-};
+import SearchBar from "./components/SearchBar/SearchBar";
+import VideoList from "./components/VideoList/VideoList";
+
+const API_KEY = "AIzaSyBDTIkrq_EQJUC8o2tW1-ASi7LIN0nbaUA";
 
 export default {
   name: "app",
   components: {
-    SearchBar
+    SearchBar,
+    VideoList
+  },
+   data(){
+    return {
+      list: []
+    };
   },
   methods: {
-    onTermChanged: word => setKeyWord(word)
-  }
-};
+      onTermChanged(word) {
+          axios.get(
+          `https://www.googleapis.com/youtube/v3/search/`,
+          {
+            params: {
+              key: API_KEY,
+              type: "video",
+              part: "snippet",
+              q: word
+            }
+          }
+        ).then(res=> this.list = res.data.items).catch(err => console.error(err.message))
+      }
+}
+}
 </script>
 <style>
 </style>
