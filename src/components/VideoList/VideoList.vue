@@ -1,21 +1,26 @@
 <template>
-<ul>
-    <li v-for="lis in list" :key="lis.id">
-        {{lis.etag}}
-    </li>
+<div class="col-md-4">
+    <ul class="list-group">
+    <VideoListItem v-for="video in videos" :key="video.etag" :video="video" @videoSelect="onVideoSelect"/>
 </ul>
+</div>
 </template>
 
 <script>
-// import VideoListItem from './VideoListItem/VideoListItem'
+import VideoListItem from './VideoListItem/VideoListItem'
 export default {
     name: 'VideoList',
     components: {
-        // VideoListItem
+        VideoListItem
     },
     props: {
-        list: Array
+        videos: Array
     },
+    methods: {
+        onVideoSelect(video){
+            this.$emit('videoSelect', video)
+        }
+    }
     
 }
 </script>
